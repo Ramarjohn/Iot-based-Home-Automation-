@@ -1,0 +1,50 @@
+#include <ESP8266HTTPClient.h>
+#include<ESP8266WiFi.h>
+const char* ssid = "ada manaketavungala";
+const char* pwd = "1234567890";
+void setup()
+{
+  Serial.begin(115200);
+  WiFi.begin(ssid,pwd);  
+  while(WiFi.status() !=WL_CONNECTED)
+  {
+    delay(500);
+    Serial.println("Waiting for connection");
+  }
+  Serial.println("Connected...");
+  delay(1000);
+if (WiFi.status() ==WL_CONNECTED)
+  {
+    Serial.println("Wi-Fi Connected!");
+  }
+  delay(2000);
+Serial.println("Sending message to server espcomm");
+  pinMode(D4,OUTPUT);
+}
+void loop()
+{
+  WiFiClient client;
+  String data;
+if(WiFi.status()==WL_CONNECTED)
+  {
+    Serial.println("in");
+    HTTPClient http;
+    String url="##########";                         // paste your url link example www.*******.com
+    http.begin(url);
+    http.addHeader("Content-Type","text/plain");
+    int httpCode=http.GET();
+    data = http.getString();
+    http.end();
+  }
+  Serial.println(data);
+  if(data == "on")
+  {
+    digitalWrite(D4,HIGH);
+    Serial.println("1");
+  }
+  else if(data == "off")
+  {
+    digitalWrite(D4,LOW);
+    Serial.println("2");
+  }
+}
